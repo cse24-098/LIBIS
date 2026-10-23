@@ -21,7 +21,6 @@ public class LoginServlet extends HttpServlet {
 
     @Override
     public void init() throws ServletException {
-
         membersList = new ArrayList<>();
         membersList.add(new Member(1, "Kamogelo", "Morerwa", "kamogelo@gmail.com", "pass123"));
         membersList.add(new Member(2, "Pako", "Daniel", "pakodaniel@gmail.com", "pako456"));
@@ -61,11 +60,20 @@ public class LoginServlet extends HttpServlet {
         }
 
         if (foundMember != null) {
+            // SUCCESS: Save to session and go to welcome
             HttpSession session = request.getSession();
             session.setAttribute("loggedInMember", foundMember);
-
-            // Redirect to the Welcome Controller, NOT welcome.jsp
             response.sendRedirect("welcome");
+        } else {
+            // FAILURE: Show error and stay on login page
+            request.setAttribute("error", "Invalid email or password.");
+            request.getRequestDispatcher("login.jsp").forward(request, response);
         }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        request.getRequestDispatcher("login.jsp").forward(request, response);
     }
 }

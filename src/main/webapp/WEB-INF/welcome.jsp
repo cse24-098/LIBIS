@@ -60,7 +60,7 @@
                         </td>
 
                         <td style="padding: 10px;">
-                            <a href="#">Search</a> |
+                            <a href="search?query=${book.title}">Search</a> |
                             <a href="#">Borrow</a> |
                             <a href="#">Reserve</a>
                         </td>
