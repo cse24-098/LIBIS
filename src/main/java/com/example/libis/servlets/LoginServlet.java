@@ -64,13 +64,8 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = request.getSession();
             session.setAttribute("loggedInMember", foundMember);
 
-            request.setAttribute("booksList", booksList);
-
-            request.getRequestDispatcher("welcome.jsp").forward(request, response);
-
-        } else {
-            request.setAttribute("error", "Invalid email or password.");
-            request.getRequestDispatcher("login.jsp").forward(request, response);
+            // Redirect to the Welcome Controller, NOT welcome.jsp
+            response.sendRedirect("welcome");
         }
     }
 }
