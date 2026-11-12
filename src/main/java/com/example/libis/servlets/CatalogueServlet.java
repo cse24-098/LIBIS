@@ -21,7 +21,7 @@ public class CatalogueServlet extends HttpServlet {
         String query = request.getParameter("query");
 
         @SuppressWarnings("unchecked")
-        List<Book> allBooks = (List<Book>) getServletContext().getAttribute("books");
+        List<Book> allBooks = (List<Book>) getServletContext().getAttribute("booksList");
 
         List<Book> results = new ArrayList<>();
 

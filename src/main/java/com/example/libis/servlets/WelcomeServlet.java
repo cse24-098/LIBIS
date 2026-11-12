@@ -1,5 +1,6 @@
 package com.example.libis.servlets;
 
+import com.example.libis.data.BookDAO;
 import com.example.libis.model.Book;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -17,13 +18,14 @@ public class WelcomeServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        // Get the books from the in-memory list we created in LoginServlet
-        List<Book> booksList = (List<Book>) getServletContext().getAttribute("booksList");
+        // 1. Call the DAO to get the books from MySQL
+        BookDAO bookDAO = new BookDAO();
+        List<Book> booksList = bookDAO.getAllBooks();
 
-        // Put it in the request so welcome.jsp can read it
-        request.setAttribute("booksList", booksList);
+        // 2. Put them into the Application Scope (so CatalogueServlet can also use them)
+        getServletContext().setAttribute("booksList", booksList);
 
-        // Forward to the JSP inside WEB-INF
+        // 3. Forward to the protected JSP inside WEB-INF
         request.getRequestDispatcher("/WEB-INF/welcome.jsp").forward(request, response);
     }
 }

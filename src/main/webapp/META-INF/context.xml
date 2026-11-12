@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+    <Resource name="jdbc/libis_db"
+              auth="Container"
+              type="javax.sql.DataSource"
+              maxActive="200"
+              maxIdle="5"
+              maxWait="10000"
+              username="DBuser"
+              password="StrongPa$$w0rd"
+              driverClassName="com.mysql.cj.jdbc.Driver"
+              url="jdbc:mysql://localhost:3306/libis_db"
+              validationQuery="SELECT 1"
+    />
+</Context>
