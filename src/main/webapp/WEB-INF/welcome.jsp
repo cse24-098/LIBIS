@@ -61,7 +61,11 @@
 
                         <td style="padding: 10px;">
                             <a href="search?query=${book.title}">Search</a> |
-                            <a href="#">Borrow</a> |
+
+                            <c:if test="${book.available}">
+                                    <a href="borrow?id=${book.bookId}">Borrow</a> |
+                            </c:if>
+
                             <a href="#">Reserve</a>
                         </td>
                     </tr>

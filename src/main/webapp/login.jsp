@@ -91,6 +91,11 @@
             <div class="error">${error}</div>
         </c:if>
 
+        <!-- Show success message if they just signed up -->
+        <% if (request.getAttribute("successMessage") != null) { %>
+            <p style="color: green; font-weight: bold;"><%= request.getAttribute("successMessage") %></p>
+        <% } %>
+
         <form action="login" method="post">
             <div class="form-group">
                 <label for="email">Email Address</label>
@@ -103,6 +108,10 @@
                        placeholder="Enter your password" required />
             </div>
             <button type="submit">Sign In</button>
+
+            <p style="margin-top: 15px; font-size: 14px;">
+                Don't have an account? <a href="signup.jsp">Sign up here</a>
+            </p>
         </form>
 
     </div>

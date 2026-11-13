@@ -2,8 +2,10 @@ package com.example.libis.model;
 
 public class Book {
     private int bookId;
+    private String isbn;
     private String title;
     private String author;
+    private String publishedYear;
     private String genre;
     private String synopsis;
     private boolean available;
@@ -11,11 +13,13 @@ public class Book {
     public Book() {
     }
 
-    public Book(int bookId, String title, String author, String genre,
+    public Book(int bookId, String isbn, String title, String author, String publishedYear, String genre,
                 String synopsis, boolean available) {
         this.bookId = bookId;
+        this.isbn = isbn;
         this.title = title;
         this.author = author;
+        this.publishedYear = publishedYear;
         this.genre = genre;
         this.synopsis = synopsis;
         this.available = available;
@@ -28,6 +32,10 @@ public class Book {
     public void setBookId(int bookId) {
         this.bookId = bookId;
     }
+
+    public String getIsbn() { return isbn; }
+
+    public void setIsbn(String isbn) {}
 
     public String getTitle() {
         return title;
@@ -44,6 +52,10 @@ public class Book {
     public void setAuthor(String author) {
         this.author = author;
     }
+
+    public String getPublishedYear() { return publishedYear; }
+
+    public void setPublishedYear(String publishedYear) {}
 
     public String getGenre() {
         return genre;

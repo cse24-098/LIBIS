@@ -4,6 +4,7 @@ import com.example.libis.model.Book;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
+import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -54,5 +55,35 @@ public class BookDAO {
         }
 
         return booksList;
+    }
+
+    public boolean updateAvailability(int bookId, boolean isAvailable) {
+        boolean isSuccess = false;
+        Connection conn = null;
+        PreparedStatement pst = null;
+
+        try {
+            Context context = new InitialContext();
+            DataSource dataSource = (DataSource) context.lookup("java:comp/env/jdbc/libis_db");
+            conn = dataSource.getConnection();
+
+            //this update query to change the available column
+            String sql = "UPDATE books SET available=? WHERE book_id=?";
+            pst = conn.prepareStatement(sql);
+
+            pst.setBoolean(1, isAvailable);
+            pst.setInt(2, bookId);
+
+            int rowsAffected = pst.executeUpdate();
+            if (rowsAffected > 0) {
+                isSuccess = true;
+            }
+        } catch (Exception e) {
+            System.out.println("Error updating books: " + e.getMessage());
+        } finally {
+            if (pst != null) { try { pst.close(); } catch (Exception e) {} }
+            if (conn != null) { try { conn.close(); } catch (Exception e) {} }
+        }
+        return isSuccess;
     }
 }

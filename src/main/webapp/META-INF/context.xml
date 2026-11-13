@@ -9,7 +9,7 @@
               username="DBuser"
               password="StrongPa$$w0rd"
               driverClassName="com.mysql.cj.jdbc.Driver"
-              url="jdbc:mysql://localhost:3306/libis_db"
+              url="jdbc:mysql://localhost:3306/libis"
               validationQuery="SELECT 1"
     />
 </Context>
