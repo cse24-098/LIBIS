@@ -7,6 +7,9 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import com.example.libis.model.Member;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MemberDAO {
 
@@ -64,4 +67,58 @@ public class MemberDAO {
         }
         return status;
     }
+
+    // 1. GET ALL MEMBERS
+    public List<Member> findAll() {
+        List<Member> list = new ArrayList<>();
+        try {
+            Context context = new InitialContext();
+            DataSource ds = (DataSource) context.lookup("java:comp/env/jdbc/libis_db");
+            try (Connection conn = ds.getConnection();
+                 PreparedStatement pst = conn.prepareStatement("SELECT * FROM members");
+                 ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    Member m = new Member();
+                    m.setMemberId(rs.getInt("member_id"));
+                    m.setFullName(rs.getString("full_name"));
+                    m.setEmail(rs.getString("email"));
+                    m.setUsername(rs.getString("username"));
+                    list.add(m);
+                }
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return list;
+    }
+
+    // 2. CREATE A MEMBER
+    public boolean create(Member m) {
+        try {
+            Context context = new InitialContext();
+            DataSource ds = (DataSource) context.lookup("java:comp/env/jdbc/libis_db");
+            String sql = "INSERT INTO members (member_number, full_name, email, username, password, role) VALUES (?, ?, ?, ?, ?, 'member')";
+            try (Connection conn = ds.getConnection();
+                 PreparedStatement pst = conn.prepareStatement(sql)) {
+                pst.setString(1, "MEM" + (int)(Math.random() * 10000)); // Generate random member number
+                pst.setString(2, m.getFullName());
+                pst.setString(3, m.getEmail());
+                pst.setString(4, m.getUsername());
+                pst.setString(5, "pass123"); // Default password for new members
+                return pst.executeUpdate() > 0;
+            }
+        } catch (Exception e) { e.printStackTrace(); return false; }
+    }
+
+    // 3. DELETE A MEMBER (Cascading delete handles loans automatically in MySQL!)
+    public boolean delete(int memberId) {
+        try {
+            Context context = new InitialContext();
+            DataSource ds = (DataSource) context.lookup("java:comp/env/jdbc/libis_db");
+            try (Connection conn = ds.getConnection();
+                 PreparedStatement pst = conn.prepareStatement("DELETE FROM members WHERE member_id = ?")) {
+                pst.setInt(1, memberId);
+                return pst.executeUpdate() > 0;
+            }
+        } catch (Exception e) { e.printStackTrace(); return false; }
+    }
+
 }

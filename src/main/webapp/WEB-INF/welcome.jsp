@@ -80,6 +80,9 @@
         <div style="margin-top: 20px;">
             <a href="logout">Logout</a>
         </div>
+
+        <a href="manageMembers">Manage Members (Librarian)</a>
+
     </div>
 
 </body>

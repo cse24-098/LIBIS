@@ -113,4 +113,26 @@ public class LoanDAO {
         }
         return isSuccess;
     }
+
+    public int countOpenLoans(int memberId) {
+        int count = 0;
+        try {
+            javax.naming.Context context = new javax.naming.InitialContext();
+            javax.sql.DataSource ds = (javax.sql.DataSource) context.lookup("java:comp/env/jdbc/libis_db");
+
+            try (java.sql.Connection conn = ds.getConnection();
+                 java.sql.PreparedStatement pst = conn.prepareStatement("SELECT COUNT(*) FROM loans WHERE member_id = ? AND returned_on IS NULL")) {
+
+                pst.setInt(1, memberId);
+                try (java.sql.ResultSet rs = pst.executeQuery()) {
+                    if (rs.next()) {
+                        count = rs.getInt(1);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Error counting loans: " + e.getMessage());
+        }
+        return count;
+    }
 }
