@@ -74,7 +74,7 @@
         </table>
 
         <div style="margin-top: 20px;">
-            <a href="login.jsp">Logout</a>
+            <a href="logout">Logout</a>
         </div>
     </div>
 

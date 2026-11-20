@@ -55,7 +55,7 @@ public class Book {
 
     public String getPublishedYear() { return publishedYear; }
 
-    public void setPublishedYear(String publishedYear) {}
+    public void setPublishedYear(int publishedYear) {}
 
     public String getGenre() {
         return genre;

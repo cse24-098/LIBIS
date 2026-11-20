@@ -18,17 +18,17 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        String email = request.getParameter("email");
+        String username = request.getParameter("username");
         String password = request.getParameter("password");
 
         // Call the DAO to check the database!
         MemberDAO dao = new MemberDAO();
-        boolean isValid = dao.validate(email, password);
+        boolean isValid = dao.validate(username, password);
 
         if (isValid) {
             // Success - we create a temporary member to save in the session
             Member loggedInMember = new Member();
-            loggedInMember.setEmail(email);
+            loggedInMember.setEmail(username);
             loggedInMember.setFirstName("Libis");
             loggedInMember.setLastName("User");
 
@@ -37,7 +37,7 @@ public class LoginServlet extends HttpServlet {
 
             response.sendRedirect("welcome");
         } else {
-            request.setAttribute("error", "Invalid email or password.");
+            request.setAttribute("error", "Invalid username or password.");
             request.getRequestDispatcher("login.jsp").forward(request, response);
         }
     }

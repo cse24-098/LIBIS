@@ -2,6 +2,7 @@
 <project version="4">
   <component name="DataSourcePerFileMappings">
     <file url="file://$PROJECT_DIR$/src/main/java/com/example/libis/data/BookDAO.java" value="322b65ad-88f5-4e70-9e68-8b40d950b8ff" />
+    <file url="file://$PROJECT_DIR$/src/main/java/com/example/libis/data/LoanDAO.java" value="322b65ad-88f5-4e70-9e68-8b40d950b8ff" />
     <file url="file://$PROJECT_DIR$/src/main/java/com/example/libis/data/MemberDAO.java" value="322b65ad-88f5-4e70-9e68-8b40d950b8ff" />
   </component>
 </project>

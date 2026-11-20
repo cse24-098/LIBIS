@@ -98,9 +98,9 @@
 
         <form action="login" method="post">
             <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email"
-                       placeholder="Enter your email" required />
+                <label for="username">Username</label>
+                <input type="username" id="username" name="username"
+                       placeholder="Enter your username" required />
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
@@ -109,9 +109,6 @@
             </div>
             <button type="submit">Sign In</button>
 
-            <p style="margin-top: 15px; font-size: 14px;">
-                Don't have an account? <a href="signup.jsp">Sign up here</a>
-            </p>
         </form>
 
     </div>

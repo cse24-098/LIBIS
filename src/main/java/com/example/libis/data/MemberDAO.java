@@ -11,7 +11,7 @@ import java.sql.SQLException;
 public class MemberDAO {
 
     //this parts reads the database during login
- public boolean validate(String email, String pass) {
+ public boolean validate(String username, String pass) {
         System.out.println("Validate called");
 
         boolean status = false;
@@ -27,8 +27,8 @@ public class MemberDAO {
 
             conn = dataSource.getConnection();
 
-            pst = conn.prepareStatement("select * from members where email=? and password=?");
-            pst.setString(1, email);
+            pst = conn.prepareStatement("select * from members where username=? and password=?");
+            pst.setString(1, username);
             pst.setString(2, pass);
 
             rs = pst.executeQuery();
@@ -63,39 +63,5 @@ public class MemberDAO {
             }
         }
         return status;
-    }
-
-    //this is for writing into the database, like adding a new member basically
-    public boolean register(String firstName, String lastName, String email, String pass) {
-        boolean isSuccess = false;
-        Connection conn = null;
-        PreparedStatement pst = null;
-
-        try {
-            Context context = new InitialContext();
-            DataSource dataSource = (DataSource) context.lookup("java:comp/env/jdbc/libis_db");
-            conn = dataSource.getConnection();
-
-            String sql = "INSERT INTO members (first_name, last_name, email, password) VALUES (?, ?, ?, ?)";
-            pst = conn.prepareStatement(sql);
-
-            pst.setString(1, firstName);
-            pst.setString(2, lastName);
-            pst.setString(3, email);
-            pst.setString(4, pass);
-
-            int rowsAffected = pst.executeUpdate();
-
-            if (rowsAffected > 0) {
-                isSuccess = true;
-            }
-        } catch (Exception e) {
-            System.out.println("Error registering member: " + e.getMessage());
-        } finally {
-            if (pst != null) { try { pst.close(); } catch (Exception e) {} }
-            if (conn != null) { try { conn.close(); } catch (Exception e) {} }
-        }
-
-        return isSuccess;
     }
 }

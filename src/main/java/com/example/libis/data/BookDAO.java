@@ -4,7 +4,6 @@ import com.example.libis.model.Book;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
-import javax.xml.crypto.Data;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -27,7 +26,10 @@ public class BookDAO {
             conn = dataSource.getConnection();
 
             // 2. Get all books from the database
-            String sql = "SELECT * FROM books";
+            String sql = "SELECT b.*, " +
+                    "(CASE WHEN l.loan_id IS NULL THEN 1 ELSE 0 END) as is_available " +
+                    "FROM books b " +
+                    "LEFT JOIN loans l ON b.book_id = l.book_id AND l.returned_on IS NULL";
             pst = conn.prepareStatement(sql);
             rs = pst.executeQuery();
 
@@ -35,17 +37,24 @@ public class BookDAO {
             while (rs.next()) {
                 Book book = new Book();
                 book.setBookId(rs.getInt("book_id"));
+                book.setIsbn(rs.getString("isbn"));
                 book.setTitle(rs.getString("title"));
                 book.setAuthor(rs.getString("author"));
+                book.setPublishedYear(rs.getInt("published_year"));
                 book.setGenre(rs.getString("genre"));
                 book.setSynopsis(rs.getString("synopsis"));
-                book.setAvailable(rs.getBoolean("available"));
+
+                //sets the calculated availability from left join
+                book.setAvailable(rs.getInt("is_available") == 1);
 
                 booksList.add(book);
+
             }
 
+            System.out.println("Total books fetched from DB: " + booksList.size());
+
         } catch (Exception e) {
-            System.out.println("Error fetching books: " + e.getMessage());
+            System.out.println("ERROR IN BOOKDAO:");
             e.printStackTrace();
         } finally {
             // Close everything
@@ -57,33 +66,4 @@ public class BookDAO {
         return booksList;
     }
 
-    public boolean updateAvailability(int bookId, boolean isAvailable) {
-        boolean isSuccess = false;
-        Connection conn = null;
-        PreparedStatement pst = null;
-
-        try {
-            Context context = new InitialContext();
-            DataSource dataSource = (DataSource) context.lookup("java:comp/env/jdbc/libis_db");
-            conn = dataSource.getConnection();
-
-            //this update query to change the available column
-            String sql = "UPDATE books SET available=? WHERE book_id=?";
-            pst = conn.prepareStatement(sql);
-
-            pst.setBoolean(1, isAvailable);
-            pst.setInt(2, bookId);
-
-            int rowsAffected = pst.executeUpdate();
-            if (rowsAffected > 0) {
-                isSuccess = true;
-            }
-        } catch (Exception e) {
-            System.out.println("Error updating books: " + e.getMessage());
-        } finally {
-            if (pst != null) { try { pst.close(); } catch (Exception e) {} }
-            if (conn != null) { try { conn.close(); } catch (Exception e) {} }
-        }
-        return isSuccess;
-    }
 }

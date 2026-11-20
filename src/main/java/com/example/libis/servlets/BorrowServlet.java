@@ -1,6 +1,6 @@
 package com.example.libis.servlets;
 
-import com.example.libis.data.BookDAO;
+import com.example.libis.data.LoanDAO;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -20,11 +20,14 @@ public class BorrowServlet extends HttpServlet {
             try {
                 int bookId = Integer.parseInt(idParam);
 
-                //tells the book dao to set available to false(borrowed)
-                BookDAO bookDAO = new BookDAO();
-                bookDAO.updateAvailability(bookId, false);
-            } catch  (NumberFormatException e) {
-                System.out.println("Invalid book ID format");
+                int memberId = 1;
+
+                // Call the new LoanDAO!
+                LoanDAO loanDAO = new LoanDAO();
+                loanDAO.borrowBook(memberId, bookId);
+
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid book ID format.");
             }
         }
 
