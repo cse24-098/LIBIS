@@ -121,4 +121,44 @@ public class MemberDAO {
         } catch (Exception e) { e.printStackTrace(); return false; }
     }
 
+    // This method fetches the full Member object so we can save it in the session
+    public Member findByUsername(String username) {
+        Member member = null;
+        Connection conn = null;
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+
+        try {
+            Context context = new InitialContext();
+            DataSource dataSource = (DataSource) context.lookup("java:comp/env/jdbc/libis_db");
+            conn = dataSource.getConnection();
+
+            String sql = "SELECT * FROM members WHERE username = ?";
+            pst = conn.prepareStatement(sql);
+            pst.setString(1, username);
+
+            rs = pst.executeQuery();
+
+            if (rs.next()) {
+                member = new Member();
+                member.setMemberId(rs.getInt("member_id"));
+                member.setFullName(rs.getString("full_name"));
+                member.setEmail(rs.getString("email"));
+                member.setUsername(rs.getString("username"));
+                member.setPassword(rs.getString("password"));
+                member.setRole(rs.getString("role"));
+            }
+
+        } catch (Exception e) {
+            System.out.println("Error finding member: " + e.getMessage());
+            e.printStackTrace();
+        } finally {
+            if (rs != null) { try { rs.close(); } catch (Exception e) {} }
+            if (pst != null) { try { pst.close(); } catch (Exception e) {} }
+            if (conn != null) { try { conn.close(); } catch (Exception e) {} }
+        }
+
+        return member;
+    }
+
 }

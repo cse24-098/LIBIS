@@ -18,19 +18,17 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
+        // 1. Read username (not email!) from the form
         String username = request.getParameter("username");
         String password = request.getParameter("password");
 
-        // Call the DAO to check the database!
+        // 2. Check against the database
         MemberDAO dao = new MemberDAO();
         boolean isValid = dao.validate(username, password);
 
         if (isValid) {
-            // Success - we create a temporary member to save in the session
-            Member loggedInMember = new Member();
-            loggedInMember.setEmail(username);
-            loggedInMember.setFirstName("Libis");
-            loggedInMember.setLastName("User");
+            // 3. Get the full Member object from the database
+            Member loggedInMember = dao.findByUsername(username);
 
             HttpSession session = request.getSession();
             session.setAttribute("loggedInMember", loggedInMember);
