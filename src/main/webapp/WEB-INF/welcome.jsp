@@ -20,7 +20,11 @@
 
         <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #2d5a27; padding-bottom: 10px;">
             <h2>LIBIS Book Catalogue</h2>
-            <h3>Welcome, ${loggedInMember.fullName}!</h3>
+            <div>
+                <span>Welcome, <strong>${loggedInMember.fullName}</strong>!</span>
+                | <a href="myLoans" style="font-weight: bold; color: #2d5a27;">My Loans</a>
+                | <a href="logout">Logout</a>
+            </div>
         </div>
 
         <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
