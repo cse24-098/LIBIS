@@ -22,7 +22,15 @@ public class MemberManageServlet extends HttpServlet {
         if ("delete".equals(action)) {
             int id = Integer.parseInt(request.getParameter("id"));
             memberService.deleteMember(id);
-            response.sendRedirect("manageMembers"); // Go back to list
+            response.sendRedirect("manageMembers");
+
+        } else if ("edit".equals(action)) {
+            // Load the member and show the edit form
+            int id = Integer.parseInt(request.getParameter("id"));
+            Member member = memberService.getMemberById(id);
+            request.setAttribute("member", member);
+            request.getRequestDispatcher("/WEB-INF/views/editMember.jsp").forward(request, response);
+
         } else {
             // Default: Show List
             List<Member> members = memberService.getAllMembers();
@@ -33,17 +41,25 @@ public class MemberManageServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // Handle the "Create Member" form submission
-        String fullName = request.getParameter("fullName");
-        String email = request.getParameter("email");
-        String username = request.getParameter("username");
+        String action = request.getParameter("action");
 
-        Member newMember = new Member();
-        newMember.setFullName(fullName);
-        newMember.setEmail(email);
-        newMember.setUsername(username);
+        if ("update".equals(action)) {
+            // Handle Edit form submission
+            Member m = new Member();
+            m.setMemberId(Integer.parseInt(request.getParameter("memberId")));
+            m.setFullName(request.getParameter("fullName"));
+            m.setEmail(request.getParameter("email"));
+            m.setUsername(request.getParameter("username"));
+            memberService.updateMember(m);
+        } else {
+            // Handle Add form submission
+            Member newMember = new Member();
+            newMember.setFullName(request.getParameter("fullName"));
+            newMember.setEmail(request.getParameter("email"));
+            newMember.setUsername(request.getParameter("username"));
+            memberService.createMember(newMember);
+        }
 
-        memberService.createMember(newMember);
-        response.sendRedirect("manageMembers"); // Redirect back to the list
+        response.sendRedirect("manageMembers");
     }
 }

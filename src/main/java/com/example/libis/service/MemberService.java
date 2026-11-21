@@ -19,4 +19,12 @@ public class MemberService {
     public boolean createMember(Member m) {
         return memberDAO.create(m);
     }
+
+    public Member getMemberById(int id) {
+        return memberDAO.findById(id);
+    }
+
+    public boolean updateMember(Member m) {
+        return memberDAO.update(m);
+    }
 }

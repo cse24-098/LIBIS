@@ -161,4 +161,45 @@ public class MemberDAO {
         return member;
     }
 
+    // 1. Find a single member by their ID (For loading the Edit form)
+    public Member findById(int memberId) {
+        Member member = null;
+        try {
+            Context context = new InitialContext();
+            DataSource dataSource = (DataSource) context.lookup("java:comp/env/jdbc/libis_db");
+            try (Connection conn = dataSource.getConnection();
+                 PreparedStatement pst = conn.prepareStatement("SELECT * FROM members WHERE member_id = ?")) {
+                pst.setInt(1, memberId);
+                try (ResultSet rs = pst.executeQuery()) {
+                    if (rs.next()) {
+                        member = new Member();
+                        member.setMemberId(rs.getInt("member_id"));
+                        member.setFullName(rs.getString("full_name"));
+                        member.setEmail(rs.getString("email"));
+                        member.setUsername(rs.getString("username"));
+                        member.setRole(rs.getString("role"));
+                    }
+                }
+            }
+        } catch (Exception e) { e.printStackTrace(); }
+        return member;
+    }
+
+    // 2. Update an existing member
+    public boolean update(Member m) {
+        try {
+            Context context = new InitialContext();
+            DataSource dataSource = (DataSource) context.lookup("java:comp/env/jdbc/libis_db");
+            String sql = "UPDATE members SET full_name = ?, email = ?, username = ? WHERE member_id = ?";
+            try (Connection conn = dataSource.getConnection();
+                 PreparedStatement pst = conn.prepareStatement(sql)) {
+                pst.setString(1, m.getFullName());
+                pst.setString(2, m.getEmail());
+                pst.setString(3, m.getUsername());
+                pst.setInt(4, m.getMemberId());
+                return pst.executeUpdate() > 0;
+            }
+        } catch (Exception e) { e.printStackTrace(); return false; }
+    }
+
 }

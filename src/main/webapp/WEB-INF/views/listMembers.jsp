@@ -50,6 +50,12 @@
                            onclick="return confirm('Are you sure? This will delete all their loan history!');"
                            style="color: red;">Delete</a>
                     </td>
+                    <td style="padding: 10px;">
+                        <a href="manageMembers?action=edit&id=${m.memberId}" style="color: blue;">Edit</a> |
+                        <a href="manageMembers?action=delete&id=${m.memberId}"
+                           onclick="return confirm('Are you sure? This will delete all their loan history!');"
+                           style="color: red;">Delete</a>
+                    </td>
                 </tr>
             </c:forEach>
         </table>
