@@ -1,10 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_1.xsd"
-         version="6.1">
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+         version="6.0">
+
+    <display-name>LIBIS Library System</display-name>
 
     <welcome-file-list>
         <welcome-file>login.jsp</welcome-file>
     </welcome-file-list>
+
+    <!-- 1. Declare Roles -->
+    <security-role>
+        <role-name>member</role-name>
+    </security-role>
+    <security-role>
+        <role-name>librarian</role-name>
+    </security-role>
+
+    <!-- 2. Protect Catalogue (Both roles) -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Protected Catalogue</web-resource-name>
+            <url-pattern>/welcome</url-pattern>
+            <url-pattern>/search</url-pattern>
+            <url-pattern>/manageMembers</url-pattern>
+            <url-pattern>/manageBooks</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>member</role-name>
+            <role-name>librarian</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <!-- 3. Protect Borrowing (Member only) -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Member Area</web-resource-name>
+            <url-pattern>/borrow</url-pattern>
+            <url-pattern>/return</url-pattern>
+            <url-pattern>/myLoans</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>member</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <!-- 4. FORM Login Config -->
+    <login-config>
+        <auth-method>FORM</auth-method>
+        <realm-name>LIBIS Realm</realm-name>
+        <form-login-config>
+            <form-login-error-page>/login-error.jsp</form-login-error-page>
+            <form-login-page>/login.jsp</form-login-page>
+        </form-login-config>
+    </login-config>
+
 </web-app>

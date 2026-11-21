@@ -8,7 +8,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebFilter("/*")
+//@WebFilter("/*")
 public class AuthenticationFilter implements Filter {
 
     @Override
@@ -20,7 +20,7 @@ public class AuthenticationFilter implements Filter {
         String path = req.getRequestURI();
 
         // 1. Allow login page, login servlet, and static assets (css, js)
-        if (path.endsWith("login.jsp") || path.endsWith("login") || path.endsWith(".css") || path.endsWith(".js")) {
+        if (path.endsWith("oldLogin.jsp") || path.endsWith("login") || path.endsWith(".css") || path.endsWith(".js")) {
             chain.doFilter(request, response);
             return;
         }

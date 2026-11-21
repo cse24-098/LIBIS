@@ -1,12 +1,9 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: kamog
-  Date: 21/11/2026
-  Time: 00:05
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+
+<fmt:setLocale value="${param.lang != null ? param.lang : 'en'}" />
+<fmt:setBundle basename="messages" />
 
 <!DOCTYPE html>
 <html>
@@ -18,8 +15,8 @@
     <div style="background-color: white; max-width: 900px; margin: 0 auto; padding: 20px; border: 1px solid #ccc;">
 
         <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #2d5a27; padding-bottom: 10px;">
-            <h2>My Loans</h2>
-            <a href="welcome">Back to Catalogue</a>
+            <h2><fmt:message key="nav.my_loans" /></h2>
+            <a href="welcome"><fmt:message key="catalogue.title" /></a>
         </div>
 
         <h3>You currently have ${loanCount} out of 3 allowed books.</h3>
@@ -30,9 +27,9 @@
         <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
             <thead>
                 <tr style="background-color: #2d5a27; color: white;">
-                    <th style="padding: 10px; text-align: left;">Title</th>
-                    <th style="padding: 10px; text-align: left;">Author</th>
-                    <th style="padding: 10px; text-align: left;">Action</th>
+                    <th style="padding: 10px; text-align: left;"><fmt:message key="catalogue.title_col" /></th>
+                    <th style="padding: 10px; text-align: left;"><fmt:message key="catalogue.author_col" /></th>
+                    <th style="padding: 10px; text-align: left;"><fmt:message key="catalogue.actions_col" /></th>
                 </tr>
             </thead>
             <tbody>
@@ -47,7 +44,6 @@
                         <td style="padding: 10px;">${book.title}</td>
                         <td style="padding: 10px;">${book.author}</td>
                         <td style="padding: 10px;">
-                            <!-- We MUST use a POST form for returning a book -->
                             <form action="return" method="post" style="margin: 0;">
                                 <input type="hidden" name="bookId" value="${book.bookId}">
                                 <button type="submit" style="background-color: #c0392b; color: white; padding: 5px 10px; border: none; cursor: pointer;">

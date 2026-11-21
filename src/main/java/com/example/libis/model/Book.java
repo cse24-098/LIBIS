@@ -5,7 +5,7 @@ public class Book {
     private String isbn;
     private String title;
     private String author;
-    private String publishedYear;
+    private int publishedYear;
     private String genre;
     private String synopsis;
     private boolean available;
@@ -13,7 +13,7 @@ public class Book {
     public Book() {
     }
 
-    public Book(int bookId, String isbn, String title, String author, String publishedYear, String genre,
+    public Book(int bookId, String isbn, String title, String author, int publishedYear, String genre,
                 String synopsis, boolean available) {
         this.bookId = bookId;
         this.isbn = isbn;
@@ -33,9 +33,13 @@ public class Book {
         this.bookId = bookId;
     }
 
-    public String getIsbn() { return isbn; }
+    public String getIsbn() {
+        return isbn;
+    }
 
-    public void setIsbn(String isbn) {}
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
+    }
 
     public String getTitle() {
         return title;
@@ -53,9 +57,13 @@ public class Book {
         this.author = author;
     }
 
-    public String getPublishedYear() { return publishedYear; }
+    public int getPublishedYear() {
+        return publishedYear;
+    }
 
-    public void setPublishedYear(int publishedYear) {}
+    public void setPublishedYear(int publishedYear) {
+        this.publishedYear = publishedYear;
+    }
 
     public String getGenre() {
         return genre;

@@ -1,13 +1,9 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: kamog
-  Date: 18/10/2026
-  Time: 20:01
-  To change this template use File | Settings | File Templates.
---%>
-
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+
+<fmt:setLocale value="${param.lang != null ? param.lang : 'en'}" />
+<fmt:setBundle basename="messages" />
 
 <!DOCTYPE html>
 <html>
@@ -19,33 +15,32 @@
     <div style="background-color: white; max-width: 900px; margin: 0 auto; padding: 20px; border: 1px solid #ccc;">
 
         <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #2d5a27; padding-bottom: 10px;">
-            <h2>LIBIS Book Catalogue</h2>
+            <h2><fmt:message key="catalogue.title" /></h2>
             <div>
-                <span>Welcome, <strong>${loggedInMember.fullName}</strong>!</span>
-                | <a href="myLoans" style="font-weight: bold; color: #2d5a27;">My Loans</a>
-                | <a href="logout">Logout</a>
+                <span><fmt:message key="catalogue.welcome" />, <strong>${loggedInMember.fullName}</strong>!</span>
+                | <a href="myLoans" style="font-weight: bold; color: #2d5a27;"><fmt:message key="nav.my_loans" /></a>
+                | <a href="logout"><fmt:message key="nav.logout" /></a>
+                | <a href="?lang=${param.lang == 'tn' ? 'en' : 'tn'}"><fmt:message key="nav.lang" /></a>
             </div>
         </div>
 
         <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
             <thead>
                 <tr style="background-color: #2d5a27; color: white;">
-                    <th style="padding: 10px; text-align: left;">Title</th>
-                    <th style="padding: 10px; text-align: left;">Author</th>
-                    <th style="padding: 10px; text-align: left;">Genre</th>
-                    <th style="padding: 10px; text-align: left;">Status</th>
-                    <th style="padding: 10px; text-align: left;">Actions</th>
+                    <th style="padding: 10px; text-align: left;"><fmt:message key="catalogue.title_col" /></th>
+                    <th style="padding: 10px; text-align: left;"><fmt:message key="catalogue.author_col" /></th>
+                    <th style="padding: 10px; text-align: left;"><fmt:message key="catalogue.genre_col" /></th>
+                    <th style="padding: 10px; text-align: left;"><fmt:message key="catalogue.status_col" /></th>
+                    <th style="padding: 10px; text-align: left;"><fmt:message key="catalogue.actions_col" /></th>
                 </tr>
             </thead>
             <tbody>
-                <!-- If the list is totally empty, show a message -->
                 <c:if test="${empty booksList}">
                     <tr>
-                        <td colspan="5" style="padding: 10px; text-align: center;">No books found. Please log in again.</td>
+                        <td colspan="5" style="padding: 10px; text-align: center;">No books found.</td>
                     </tr>
                 </c:if>
 
-                <!-- Loop through the books -->
                 <c:forEach var="book" items="${booksList}">
                     <tr style="border-bottom: 1px solid #ddd;">
                         <td style="padding: 10px;">${book.title}</td>
@@ -55,22 +50,22 @@
                         <td style="padding: 10px;">
                             <c:choose>
                                 <c:when test="${book.available}">
-                                    <span style="color: green;">Available</span>
+                                    <span style="color: green;"><fmt:message key="catalogue.available" /></span>
                                 </c:when>
                                 <c:otherwise>
-                                    <span style="color: red;">Borrowed</span>
+                                    <span style="color: red;"><fmt:message key="catalogue.borrowed" /></span>
                                 </c:otherwise>
                             </c:choose>
                         </td>
 
                         <td style="padding: 10px;">
-                            <a href="search?query=${book.title}">Search</a> |
+                            <a href="search?query=${book.title}"><fmt:message key="catalogue.search" /></a> |
 
                             <c:if test="${book.available}">
-                                    <a href="borrow?id=${book.bookId}">Borrow</a> |
+                                <a href="borrow?id=${book.bookId}"><fmt:message key="catalogue.borrow" /></a> |
                             </c:if>
 
-                            <a href="#">Reserve</a>
+                            <a href="#"><fmt:message key="catalogue.reserve" /></a>
                         </td>
                     </tr>
                 </c:forEach>
@@ -78,10 +73,9 @@
         </table>
 
         <div style="margin-top: 20px;">
-            <a href="logout">Logout</a>
+            <a href="manageMembers">Manage Members (Librarian)</a> |
+            <a href="manageBooks">Manage Books (Librarian)</a>
         </div>
-
-        <a href="manageMembers">Manage Members (Librarian)</a>
 
     </div>
 
