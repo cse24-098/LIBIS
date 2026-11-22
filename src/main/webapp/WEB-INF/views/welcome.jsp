@@ -2,7 +2,15 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
-<fmt:setLocale value="${param.lang != null ? param.lang : 'en'}" />
+<c:if test="${param.lang == 'en' || param.lang == 'tn'}">
+    <c:set var="selectedLanguage" value="${param.lang}" scope="session" />
+</c:if>
+
+<c:if test="${empty sessionScope.selectedLanguage}">
+    <c:set var="selectedLanguage" value="en" scope="session" />
+</c:if>
+
+<fmt:setLocale value="${sessionScope.selectedLanguage}" />
 <fmt:setBundle basename="messages" />
 
 <!DOCTYPE html>
@@ -124,7 +132,9 @@
                 <span class="user-greeting"><fmt:message key="catalogue.welcome" />, <strong>${loggedInMember.fullName}</strong></span>
                 <a href="myLoans"><fmt:message key="nav.my_loans" /></a>
                 <a href="logout"><fmt:message key="nav.logout" /></a>
-                <a href="?lang=${param.lang == 'tn' ? 'en' : 'tn'}"><fmt:message key="nav.lang" /></a>
+                <a href="?lang=${sessionScope.selectedLanguage == 'tn' ? 'en' : 'tn'}">
+                    <fmt:message key="nav.lang" />
+                </a>
             </div>
         </div>
 
@@ -175,9 +185,13 @@
         <!-- ONLY SHOW THIS IF THE USER IS A LIBRARIAN -->
         <c:if test="${loggedInMember.role == 'librarian'}">
             <div class="admin-panel">
-                <h3>Librarian Administration</h3>
-                <a href="manageMembers">Manage Members</a>
-                <a href="manageBooks">Manage Books</a>
+                <h3><fmt:message key="admin.title" /></h3>
+                <a href="manageMembers">
+                    <fmt:message key="admin.manage_members" />
+                </a>
+                <a href="manageBooks">
+                    <fmt:message key="admin.manage_books" />
+                </a>
             </div>
         </c:if>
 

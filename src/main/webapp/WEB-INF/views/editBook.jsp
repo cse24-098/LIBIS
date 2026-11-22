@@ -5,11 +5,23 @@
   Time: 12:02
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+
+<c:if test="${param.lang == 'en' || param.lang == 'tn'}">
+    <c:set var="selectedLanguage" value="${param.lang}" scope="session" />
+</c:if>
+
+<c:if test="${empty sessionScope.selectedLanguage}">
+    <c:set var="selectedLanguage" value="en" scope="session" />
+</c:if>
+
+<fmt:setLocale value="${sessionScope.selectedLanguage}" />
+<fmt:setBundle basename="messages" />
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Edit Book - LIBIS</title>
+    <title><fmt:message key="books.edit_book" /> - LIBIS</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #eef2f5; padding: 40px 20px; margin: 0; color: #333; }
         .container { background-color: white; max-width: 500px; margin: 0 auto; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
@@ -26,52 +38,65 @@
         .btn-cancel:hover { text-decoration: underline; }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
-            <h2>Edit Book</h2>
+            <h2><fmt:message key="books.edit_book" /></h2>
         </div>
 
         <form action="manageBooks" method="post">
-            <!-- Hidden action and ID so the Servlet knows who to update -->
+            <!-- Hidden action and ID for updating the book -->
             <input type="hidden" name="action" value="update">
             <input type="hidden" name="bookId" value="${book.bookId}">
 
             <div class="form-group">
                 <label>ISBN:</label>
-                <input type="text" name="isbn" value="${book.isbn}" required>
+                <input type="text" name="isbn"
+                       value="<c:out value='${book.isbn}' />" required>
             </div>
 
             <div class="form-group">
-                <label>Title:</label>
-                <input type="text" name="title" value="${book.title}" required>
+                <label><fmt:message key="books.title" />:</label>
+                <input type="text" name="title"
+                       value="<c:out value='${book.title}' />" required>
             </div>
 
             <div class="form-group">
-                <label>Author:</label>
-                <input type="text" name="author" value="${book.author}" required>
+                <label><fmt:message key="books.author" />:</label>
+                <input type="text" name="author"
+                       value="<c:out value='${book.author}' />" required>
             </div>
 
             <div class="form-group">
-                <label>Published Year:</label>
-                <input type="number" name="publishedYear" value="${book.publishedYear}" required>
+                <label><fmt:message key="books.published_year" />:</label>
+                <input type="number" name="publishedYear"
+                       value="${book.publishedYear}" required>
             </div>
 
             <div class="form-group">
-                <label>Genre:</label>
-                <input type="text" name="genre" value="${book.genre}">
+                <label><fmt:message key="books.genre" />:</label>
+                <input type="text" name="genre"
+                       value="<c:out value='${book.genre}' />">
             </div>
 
             <div class="form-group">
-                <label>Synopsis:</label>
-                <input type="text" name="synopsis" value="${book.synopsis}">
+                <label><fmt:message key="books.synopsis" />:</label>
+                <input type="text" name="synopsis"
+                       value="<c:out value='${book.synopsis}' />">
             </div>
 
             <div class="actions">
-                <button type="submit" class="btn-save">Save Changes</button>
-                <a href="manageBooks" class="btn-cancel">Cancel</a>
+                <button type="submit" class="btn-save">
+                    <fmt:message key="books.save_changes" />
+                </button>
+
+                <a href="manageBooks" class="btn-cancel">
+                    <fmt:message key="books.cancel" />
+                </a>
             </div>
         </form>
     </div>
 </body>
+
 </html>

@@ -1,5 +1,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+
+<c:if test="${param.lang == 'en' || param.lang == 'tn'}">
+    <c:set var="selectedLanguage" value="${param.lang}" scope="session" />
+</c:if>
+
+<c:if test="${empty sessionScope.selectedLanguage}">
+    <c:set var="selectedLanguage" value="en" scope="session" />
+</c:if>
+
+<fmt:setLocale value="${sessionScope.selectedLanguage}" />
+<fmt:setBundle basename="messages" />
 
 <!DOCTYPE html>
 <html>
@@ -26,44 +38,69 @@
         .action-links a:hover { text-decoration: underline; }
     </style>
 </head>
+
 <body>
 
     <div class="container">
         <div class="header">
-            <h2>Manage Members</h2>
-            <a href="welcome" class="back-link">← Back to Catalogue</a>
+            <h2><fmt:message key="members.manage" /></h2>
+            <a href="welcome" class="back-link">
+                ← <fmt:message key="members.back" />
+            </a>
         </div>
 
         <div class="form-panel">
-            <h3>Add New Member</h3>
+            <h3><fmt:message key="members.add_new" /></h3>
+
             <form action="manageMembers" method="post">
-                <input type="text" name="fullName" placeholder="Full Name" required>
-                <input type="email" name="email" placeholder="Email" required>
-                <input type="text" name="username" placeholder="Username" required>
-                <button type="submit" class="btn-add">Add Member</button>
+                <input type="text" name="fullName"
+                       placeholder="<fmt:message key='members.full_name' />"
+                       required>
+
+                <input type="email" name="email"
+                       placeholder="<fmt:message key='members.email' />"
+                       required>
+
+                <input type="text" name="username"
+                       placeholder="<fmt:message key='members.username' />"
+                       required>
+
+                <button type="submit" class="btn-add">
+                    <fmt:message key="members.add" />
+                </button>
             </form>
         </div>
 
         <table>
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Username</th>
-                    <th>Action</th>
+                    <th><fmt:message key="members.name" /></th>
+                    <th><fmt:message key="members.email" /></th>
+                    <th><fmt:message key="members.username" /></th>
+                    <th><fmt:message key="members.action" /></th>
                 </tr>
             </thead>
+
             <tbody>
                 <c:forEach var="m" items="${memberList}">
                     <tr>
-                        <td><strong>${m.fullName}</strong></td>
-                        <td>${m.email}</td>
-                        <td>${m.username}</td>
+                        <td>
+                            <strong><c:out value="${m.fullName}" /></strong>
+                        </td>
+                        <td><c:out value="${m.email}" /></td>
+                        <td><c:out value="${m.username}" /></td>
+
                         <td class="action-links">
-                            <a href="manageMembers?action=edit&id=${m.memberId}" class="link-edit">Edit</a>
-                            <a href="manageMembers?action=delete&id=${m.memberId}"
-                               onclick="return confirm('Are you sure? This will delete all their loan history!');"
-                               class="link-delete">Delete</a>
+                            <a href="manageMembers?action=edit&amp;id=${m.memberId}"
+                               class="link-edit">
+                                <fmt:message key="members.edit" />
+                            </a>
+
+                            <a href="manageMembers?action=delete&amp;id=${m.memberId}"
+                               onclick="return confirm('<fmt:message key='members.delete_confirm' />');"
+                               class="link-delete">
+                                <fmt:message key="members.delete" />
+                            </a>
                         </td>
                     </tr>
                 </c:forEach>
@@ -72,4 +109,5 @@
     </div>
 
 </body>
+
 </html>

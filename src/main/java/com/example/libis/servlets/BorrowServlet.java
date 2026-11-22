@@ -7,8 +7,9 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
+import com.example.libis.data.MemberDAO;
 import com.example.libis.service.LoanService;
+import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
@@ -19,19 +20,30 @@ public class BorrowServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String idParam = request.getParameter("id"); // this gets the book id from the url
 
-        // 1. Get the session and the logged-in member
-        HttpSession session = request.getSession(false);
-        Member loggedInMember = null;
+        String username = request.getRemoteUser();
 
-        if (session != null) {
-            loggedInMember = (Member) session.getAttribute("loggedInMember");
+        if (username == null) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
+                    "You must be logged in to borrow books.");
+            return;
         }
 
+        MemberDAO memberDAO = new MemberDAO();
+        Member loggedInMember = memberDAO.findByUsername(username);
+
+        if (loggedInMember == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND,
+                    "Member account not found.");
+            return;
+        }
+
+        HttpSession session = request.getSession();
+
         // 2. If they are logged in and there is a book ID, try to borrow
-        if (loggedInMember != null && idParam != null) {
+        if (idParam != null) {
             try {
                 int bookId = Integer.parseInt(idParam);
-                int memberId = loggedInMember.getMemberId(); // Use the real ID from the session!
+                int memberId = loggedInMember.getMemberId(); // ID retrieved using the authenticated username
 
                 // 3. Ask the Service if they are allowed to borrow (Max 3 rule)
                 LoanService loanService = new LoanService();

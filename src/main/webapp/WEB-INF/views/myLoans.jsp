@@ -2,13 +2,21 @@
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 
-<fmt:setLocale value="${param.lang != null ? param.lang : 'en'}" />
+<c:if test="${param.lang == 'en' || param.lang == 'tn'}">
+    <c:set var="selectedLanguage" value="${param.lang}" scope="session" />
+</c:if>
+
+<c:if test="${empty sessionScope.selectedLanguage}">
+    <c:set var="selectedLanguage" value="en" scope="session" />
+</c:if>
+
+<fmt:setLocale value="${sessionScope.selectedLanguage}" />
 <fmt:setBundle basename="messages" />
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My Loans - LIBIS</title>
+    <title><fmt:message key="nav.my_loans" /> - LIBIS</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #eef2f5; padding: 40px 20px; margin: 0; color: #333; }
         .container { background-color: white; max-width: 1000px; margin: 0 auto; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
@@ -35,10 +43,16 @@
             <a href="welcome" class="back-link">← <fmt:message key="catalogue.title" /></a>
         </div>
 
+
         <div class="loan-status">
-            You currently have <strong>${loanCount}</strong> out of 3 allowed books.
+            <fmt:message key="loans.status">
+                <fmt:param value="${loanCount}" />
+            </fmt:message>
+
             <c:if test="${loanCount >= 3}">
-                <span class="warning">You have reached the maximum limit!</span>
+                <span class="warning">
+                    <fmt:message key="loans.limit" />
+                </span>
             </c:if>
         </div>
 
@@ -53,7 +67,9 @@
             <tbody>
                 <c:if test="${empty myBooks}">
                     <tr>
-                        <td colspan="3" class="no-loans">You have no books out right now.</td>
+                        <td colspan="3" class="no-loans">
+                            <fmt:message key="loans.empty" />
+                        </td>
                     </tr>
                 </c:if>
 
@@ -64,7 +80,9 @@
                         <td>
                             <form action="return" method="post" style="margin: 0;">
                                 <input type="hidden" name="bookId" value="${book.bookId}">
-                                <button type="submit" class="btn-return">Return</button>
+                                <button type="submit" class="btn-return">
+                                    <fmt:message key="loans.return" />
+                                </button>
                             </form>
                         </td>
                     </tr>

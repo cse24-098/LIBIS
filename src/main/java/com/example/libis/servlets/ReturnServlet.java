@@ -7,8 +7,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.HttpSession;
-
+import com.example.libis.data.MemberDAO;
 import java.io.IOException;
 
 @WebServlet("/return")
@@ -18,9 +17,22 @@ public class ReturnServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
 
-        HttpSession session = request.getSession(false);
-        Member loggedInMember = (Member) session.getAttribute("loggedInMember");
+        String username = request.getRemoteUser();
 
+        if (username == null) {
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED,
+                    "You must be logged in to return books.");
+            return;
+        }
+
+        MemberDAO memberDAO = new MemberDAO();
+        Member loggedInMember = memberDAO.findByUsername(username);
+
+        if (loggedInMember == null) {
+            response.sendError(HttpServletResponse.SC_NOT_FOUND,
+                    "Member account not found.");
+            return;
+        }
         if (loggedInMember != null) {
             String bookIdStr = request.getParameter("bookId");
             if (bookIdStr != null) {

@@ -27,9 +27,12 @@ public class BookDAO {
 
             // 2. Get all books from the database
             String sql = "SELECT b.*, " +
-                    "(CASE WHEN l.loan_id IS NULL THEN 1 ELSE 0 END) as is_available " +
-                    "FROM books b " +
-                    "LEFT JOIN loans l ON b.book_id = l.book_id AND l.returned_on IS NULL";
+                    "CASE WHEN EXISTS (" +
+                    "SELECT 1 FROM loans l " +
+                    "WHERE l.book_id = b.book_id " +
+                    "AND l.returned_on IS NULL" +
+                    ") THEN 0 ELSE 1 END AS is_available " +
+                    "FROM books b";
             pst = conn.prepareStatement(sql);
             rs = pst.executeQuery();
 

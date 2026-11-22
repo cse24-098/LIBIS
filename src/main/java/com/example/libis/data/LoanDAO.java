@@ -131,7 +131,7 @@ public class LoanDAO {
                 }
             }
         } catch (Exception e) {
-            System.out.println("Error counting loans: " + e.getMessage());
+            throw new IllegalStateException("Unable to count active loans", e);
         }
         return count;
     }

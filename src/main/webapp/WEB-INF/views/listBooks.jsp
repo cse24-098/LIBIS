@@ -1,10 +1,22 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+
+<c:if test="${param.lang == 'en' || param.lang == 'tn'}">
+    <c:set var="selectedLanguage" value="${param.lang}" scope="session" />
+</c:if>
+
+<c:if test="${empty sessionScope.selectedLanguage}">
+    <c:set var="selectedLanguage" value="en" scope="session" />
+</c:if>
+
+<fmt:setLocale value="${sessionScope.selectedLanguage}" />
+<fmt:setBundle basename="messages" />
 
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Manage Books - LIBIS</title>
+    <title><fmt:message key="members.edit_member" /> - LIBIS</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #eef2f5; padding: 40px 20px; margin: 0; color: #333; }
         .container { background-color: white; max-width: 1000px; margin: 0 auto; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
@@ -26,45 +38,75 @@
         .action-links a:hover { text-decoration: underline; }
     </style>
 </head>
+
 <body>
 
     <div class="container">
         <div class="header">
-            <h2>Manage Books</h2>
-            <a href="welcome" class="back-link">← Back to Catalogue</a>
+            <h2><fmt:message key="books.manage" /></h2>
+            <a href="welcome" class="back-link">
+                ← <fmt:message key="books.back" />
+            </a>
         </div>
 
         <div class="form-panel">
-            <h3>Add New Book</h3>
+            <h3><fmt:message key="books.add_new" /></h3>
+
             <form action="manageBooks" method="post">
-                <input type="text" name="isbn" placeholder="ISBN" required>
-                <input type="text" name="title" placeholder="Title" required>
-                <input type="text" name="author" placeholder="Author" required>
-                <input type="number" name="publishedYear" placeholder="Year" required>
-                <input type="text" name="genre" placeholder="Genre">
-                <input type="text" name="synopsis" placeholder="Synopsis">
-                <button type="submit" class="btn-add">Add Book</button>
+                <input type="text" name="isbn"
+                       placeholder="ISBN" required>
+
+                <input type="text" name="title"
+                       placeholder="<fmt:message key='books.title' />"
+                       required>
+
+                <input type="text" name="author"
+                       placeholder="<fmt:message key='books.author' />"
+                       required>
+
+                <input type="number" name="publishedYear"
+                       placeholder="<fmt:message key='books.year' />"
+                       required>
+
+                <input type="text" name="genre"
+                       placeholder="<fmt:message key='books.genre' />">
+
+                <input type="text" name="synopsis"
+                       placeholder="<fmt:message key='books.synopsis' />">
+
+                <button type="submit" class="btn-add">
+                    <fmt:message key="books.add" />
+                </button>
             </form>
         </div>
 
         <table>
             <thead>
                 <tr>
-                    <th>Title</th>
-                    <th>Author</th>
-                    <th>Action</th>
+                    <th><fmt:message key="books.title" /></th>
+                    <th><fmt:message key="books.author" /></th>
+                    <th><fmt:message key="books.action" /></th>
                 </tr>
             </thead>
+
             <tbody>
                 <c:forEach var="b" items="${bookList}">
                     <tr>
-                        <td><strong>${b.title}</strong></td>
-                        <td>${b.author}</td>
+                        <td><strong><c:out value="${b.title}" /></strong></td>
+                        <td><c:out value="${b.author}" /></td>
                         <td class="action-links">
-                            <a href="manageBooks?action=edit&id=${b.bookId}" class="link-edit">Edit</a>
-                            <a href="manageBooks?action=delete&id=${b.bookId}"
-                               onclick="return confirm('Delete this book?');"
-                               class="link-delete">Delete</a>
+
+                            <a href="manageBooks?action=edit&amp;id=${b.bookId}"
+                               class="link-edit">
+                                <fmt:message key="books.edit" />
+                            </a>
+
+                            <a href="manageBooks?action=delete&amp;id=${b.bookId}"
+                               onclick="return confirm('<fmt:message key='books.delete_confirm' />');"
+                               class="link-delete">
+                                <fmt:message key="books.delete" />
+                            </a>
+
                         </td>
                     </tr>
                 </c:forEach>
@@ -73,4 +115,5 @@
     </div>
 
 </body>
+
 </html>

@@ -1,4 +1,17 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
+
+<c:if test="${param.lang == 'en' || param.lang == 'tn'}">
+    <c:set var="selectedLanguage" value="${param.lang}" scope="session" />
+</c:if>
+
+<c:if test="${empty sessionScope.selectedLanguage}">
+    <c:set var="selectedLanguage" value="en" scope="session" />
+</c:if>
+
+<fmt:setLocale value="${sessionScope.selectedLanguage}" />
+<fmt:setBundle basename="messages" />
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,10 +32,11 @@
         .btn-cancel:hover { text-decoration: underline; }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
-            <h2>Edit Member</h2>
+            <h2><fmt:message key="members.edit_member" /></h2>
         </div>
 
         <form action="manageMembers" method="post">
@@ -31,25 +45,33 @@
             <input type="hidden" name="memberId" value="${member.memberId}">
 
             <div class="form-group">
-                <label>Full Name:</label>
-                <input type="text" name="fullName" value="${member.fullName}" required>
+                <label><fmt:message key="members.full_name" />:</label>
+                <input type="text" name="fullName"
+                       value="<c:out value='${member.fullName}' />" required>
             </div>
 
             <div class="form-group">
-                <label>Email:</label>
-                <input type="email" name="email" value="${member.email}" required>
+                <label><fmt:message key="members.email" />:</label>
+                <input type="email" name="email"
+                       value="<c:out value='${member.email}' />" required>
             </div>
 
             <div class="form-group">
-                <label>Username:</label>
-                <input type="text" name="username" value="${member.username}" required>
+                <label><fmt:message key="members.username" />:</label>
+                <input type="text" name="username"
+                       value="<c:out value='${member.username}' />" required>
             </div>
 
             <div class="actions">
-                <button type="submit" class="btn-save">Save Changes</button>
-                <a href="manageMembers" class="btn-cancel">Cancel</a>
+                <button type="submit" class="btn-save">
+                    <fmt:message key="members.save_changes" />
+                </button>
+                <a href="manageMembers" class="btn-cancel">
+                    <fmt:message key="members.cancel" />
+                </a>
             </div>
         </form>
     </div>
 </body>
+
 </html>
