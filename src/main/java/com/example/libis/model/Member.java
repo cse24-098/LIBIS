@@ -3,6 +3,7 @@ package com.example.libis.model;
 public class Member {
     private int memberId;
     private String fullName;
+    private String memberNumber;
     private String email;
     private String username;
     private String password;
@@ -18,6 +19,9 @@ public class Member {
     public String getFullName() { return fullName; }
     public void setFullName(String fullName) { this.fullName = fullName; }
 
+    public String getMemberNumber () { return memberNumber; }
+    public void setMemberNumber(String memberNumber) { this.memberNumber = memberNumber; }
+
     public String getEmail() { return email; }
     public void setEmail(String email) { this.email = email; }
 
@@ -29,4 +33,5 @@ public class Member {
 
     public String getRole() { return role; }
     public void setRole(String role) { this.role = role; }
+
 }

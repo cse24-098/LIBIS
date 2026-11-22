@@ -5,17 +5,16 @@
 <c:if test="${param.lang == 'en' || param.lang == 'tn'}">
     <c:set var="selectedLanguage" value="${param.lang}" scope="session" />
 </c:if>
-
 <c:if test="${empty sessionScope.selectedLanguage}">
     <c:set var="selectedLanguage" value="en" scope="session" />
 </c:if>
-
 <fmt:setLocale value="${sessionScope.selectedLanguage}" />
 <fmt:setBundle basename="messages" />
+
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Edit Member - LIBIS</title>
+    <title><fmt:message key="members.edit_member" /> - LIBIS</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #eef2f5; padding: 40px 20px; margin: 0; color: #333; }
         .container { background-color: white; max-width: 500px; margin: 0 auto; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
@@ -30,36 +29,55 @@
         .btn-save:hover { background-color: #1a3c1a; }
         .btn-cancel { color: #c0392b; text-decoration: none; margin-left: 15px; font-weight: bold; font-size: 14px; }
         .btn-cancel:hover { text-decoration: underline; }
+        .error-box { background-color: #f8d7da; color: #721c24; padding: 15px; margin-bottom: 20px; border-radius: 4px; font-size: 14px; border: 1px solid #f5c6cb;}
+        .error-box ul { margin: 0; padding-left: 20px; }
     </style>
 </head>
-
 <body>
     <div class="container">
         <div class="header">
             <h2><fmt:message key="members.edit_member" /></h2>
         </div>
 
+        <!-- Show validation errors if update fails -->
+        <c:if test="${not empty errorList}">
+            <div class="error-box">
+                <ul>
+                    <c:forEach var="error" items="${errorList}">
+                        <li><c:out value="${error}" /></li>
+                    </c:forEach>
+                </ul>
+            </div>
+        </c:if>
+
         <form action="manageMembers" method="post">
-            <!-- Hidden action and ID so the Servlet knows who to update -->
             <input type="hidden" name="action" value="update">
             <input type="hidden" name="memberId" value="${member.memberId}">
 
             <div class="form-group">
+                <label><fmt:message key="members.member_number" />:</label>
+                <input type="text" name="memberNumber" value="<c:out value='${member.memberNumber}' />" required>
+            </div>
+
+            <div class="form-group">
                 <label><fmt:message key="members.full_name" />:</label>
-                <input type="text" name="fullName"
-                       value="<c:out value='${member.fullName}' />" required>
+                <input type="text" name="fullName" value="<c:out value='${member.fullName}' />" required>
             </div>
 
             <div class="form-group">
                 <label><fmt:message key="members.email" />:</label>
-                <input type="email" name="email"
-                       value="<c:out value='${member.email}' />" required>
+                <input type="email" name="email" value="<c:out value='${member.email}' />" required>
             </div>
 
             <div class="form-group">
                 <label><fmt:message key="members.username" />:</label>
-                <input type="text" name="username"
-                       value="<c:out value='${member.username}' />" required>
+                <input type="text" name="username" value="<c:out value='${member.username}' />" required>
+            </div>
+
+            <div class="form-group">
+                <label><fmt:message key="members.password" /> :</label>
+                <!-- Intentionally no 'value' attribute here for security -->
+                <input type="password" name="password" placeholder="Enter new password">
             </div>
 
             <div class="actions">
@@ -73,5 +91,4 @@
         </form>
     </div>
 </body>
-
 </html>

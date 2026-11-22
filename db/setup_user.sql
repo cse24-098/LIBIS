@@ -1,0 +1,3 @@
+CREATE USER 'DBuser'@'%' IDENTIFIED BY 'StrongPa$$w0rd';
+
+GRANT ALL PRIVILEGES ON *.* TO 'DBuser'@'%' WITH GRANT OPTION;
