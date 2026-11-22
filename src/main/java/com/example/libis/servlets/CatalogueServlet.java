@@ -43,7 +43,7 @@ public class CatalogueServlet extends HttpServlet {
         request.setAttribute("results", results);
         request.setAttribute("resultCount", results.size());
 
-        request.getRequestDispatcher("search.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/search.jsp").forward(request, response);
     }
 
     @Override

@@ -26,6 +26,6 @@ public class WelcomeServlet extends HttpServlet {
         getServletContext().setAttribute("booksList", booksList);
 
         // 3. Forward to the protected JSP inside WEB-INF
-        request.getRequestDispatcher("/WEB-INF/welcome.jsp").forward(request, response);
+        request.getRequestDispatcher("/WEB-INF/views/welcome.jsp").forward(request, response);
     }
 }

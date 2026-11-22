@@ -5,12 +5,11 @@
          version="6.0">
 
     <display-name>LIBIS Library System</display-name>
-
     <welcome-file-list>
         <welcome-file>login.jsp</welcome-file>
     </welcome-file-list>
 
-    <!-- 1. Declare Roles -->
+    <!-- 1. Declare the Roles -->
     <security-role>
         <role-name>member</role-name>
     </security-role>
@@ -18,14 +17,12 @@
         <role-name>librarian</role-name>
     </security-role>
 
-    <!-- 2. Protect Catalogue (Both roles) -->
+    <!-- 2. Catalogue: Both Roles -->
     <security-constraint>
         <web-resource-collection>
-            <web-resource-name>Protected Catalogue</web-resource-name>
+            <web-resource-name>Catalogue Area</web-resource-name>
             <url-pattern>/welcome</url-pattern>
             <url-pattern>/search</url-pattern>
-            <url-pattern>/manageMembers</url-pattern>
-            <url-pattern>/manageBooks</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>member</role-name>
@@ -33,7 +30,7 @@
         </auth-constraint>
     </security-constraint>
 
-    <!-- 3. Protect Borrowing (Member only) -->
+    <!-- 3. Borrowing: Member Only -->
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>Member Area</web-resource-name>
@@ -46,13 +43,25 @@
         </auth-constraint>
     </security-constraint>
 
-    <!-- 4. FORM Login Config -->
+    <!-- 4. Management: Librarian Only -->
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>Librarian Area</web-resource-name>
+            <url-pattern>/manageBooks</url-pattern>
+            <url-pattern>/manageMembers</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>librarian</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <!-- 5. FORM Login Config -->
     <login-config>
         <auth-method>FORM</auth-method>
         <realm-name>LIBIS Realm</realm-name>
         <form-login-config>
-            <form-login-error-page>/login-error.jsp</form-login-error-page>
             <form-login-page>/login.jsp</form-login-page>
+            <form-login-error-page>/login-error.jsp</form-login-error-page>
         </form-login-config>
     </login-config>
 

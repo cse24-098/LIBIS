@@ -1,10 +1,3 @@
-<%--
-  Created by IntelliJ IDEA.
-  User: kamog
-  Date: 21/11/2026
-  Time: 00:24
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
 
@@ -12,54 +5,71 @@
 <html>
 <head>
     <title>Manage Members - LIBIS</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #eef2f5; padding: 40px 20px; margin: 0; color: #333; }
+        .container { background-color: white; max-width: 1000px; margin: 0 auto; padding: 30px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid #2d5a27; padding-bottom: 15px; margin-bottom: 25px; }
+        .header h2 { margin: 0; color: #2d5a27; }
+        .back-link { color: #2d5a27; text-decoration: none; font-weight: bold; }
+        .form-panel { background-color: #f9fbf9; border: 1px solid #c3d6c1; padding: 15px; border-radius: 6px; margin-bottom: 25px; }
+        .form-panel h3 { margin-top: 0; color: #2d5a27; font-size: 16px; }
+        .form-panel input { padding: 8px; margin-right: 10px; border: 1px solid #ccc; border-radius: 4px; }
+        .btn-add { background-color: #2d5a27; color: white; padding: 9px 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-add:hover { background-color: #1a3c1a; }
+        table { width: 100%; border-collapse: collapse; }
+        th { background-color: #2d5a27; color: white; padding: 12px; text-align: left; font-weight: 600; }
+        td { padding: 12px; border-bottom: 1px solid #e0e0e0; font-size: 14px; }
+        tr:hover { background-color: #f9fbf9; }
+        .action-links a { text-decoration: none; font-weight: 500; margin-right: 10px; }
+        .link-edit { color: #2980b9; }
+        .link-delete { color: #c0392b; }
+        .action-links a:hover { text-decoration: underline; }
+    </style>
 </head>
-<body style="font-family: Arial; background-color: #f0f0f0; padding: 20px;">
-    <div style="background-color: white; max-width: 900px; margin: 0 auto; padding: 20px; border: 1px solid #ccc;">
+<body>
 
-        <div style="display: flex; justify-content: space-between; border-bottom: 2px solid #2d5a27; padding-bottom: 10px;">
+    <div class="container">
+        <div class="header">
             <h2>Manage Members</h2>
-            <a href="welcome">Back to Catalogue</a>
+            <a href="welcome" class="back-link">← Back to Catalogue</a>
         </div>
 
-        <!-- Add Member Form -->
-        <div style="background-color: #e8f5e9; padding: 15px; margin-top: 20px;">
+        <div class="form-panel">
             <h3>Add New Member</h3>
             <form action="manageMembers" method="post">
                 <input type="text" name="fullName" placeholder="Full Name" required>
                 <input type="email" name="email" placeholder="Email" required>
                 <input type="text" name="username" placeholder="Username" required>
-                <button type="submit" style="background-color: #2d5a27; color: white; padding: 5px 10px;">Add Member</button>
+                <button type="submit" class="btn-add">Add Member</button>
             </form>
         </div>
 
-        <!-- Members Table -->
-        <table style="width: 100%; border-collapse: collapse; margin-top: 20px;">
-            <tr style="background-color: #2d5a27; color: white;">
-                <th style="padding: 10px; text-align: left;">Name</th>
-                <th style="padding: 10px; text-align: left;">Email</th>
-                <th style="padding: 10px; text-align: left;">Username</th>
-                <th style="padding: 10px; text-align: left;">Action</th>
-            </tr>
-            <c:forEach var="m" items="${memberList}">
-                <tr style="border-bottom: 1px solid #ddd;">
-                    <td style="padding: 10px;">${m.fullName}</td>
-                    <td style="padding: 10px;">${m.email}</td>
-                    <td style="padding: 10px;">${m.username}</td>
-                    <td style="padding: 10px;">
-                        <a href="manageMembers?action=delete&id=${m.memberId}"
-                           onclick="return confirm('Are you sure? This will delete all their loan history!');"
-                           style="color: red;">Delete</a>
-                    </td>
-                    <td style="padding: 10px;">
-                        <a href="manageMembers?action=edit&id=${m.memberId}" style="color: blue;">Edit</a> |
-                        <a href="manageMembers?action=delete&id=${m.memberId}"
-                           onclick="return confirm('Are you sure? This will delete all their loan history!');"
-                           style="color: red;">Delete</a>
-                    </td>
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Username</th>
+                    <th>Action</th>
                 </tr>
-            </c:forEach>
+            </thead>
+            <tbody>
+                <c:forEach var="m" items="${memberList}">
+                    <tr>
+                        <td><strong>${m.fullName}</strong></td>
+                        <td>${m.email}</td>
+                        <td>${m.username}</td>
+                        <td class="action-links">
+                            <a href="manageMembers?action=edit&id=${m.memberId}" class="link-edit">Edit</a>
+                            <a href="manageMembers?action=delete&id=${m.memberId}"
+                               onclick="return confirm('Are you sure? This will delete all their loan history!');"
+                               class="link-delete">Delete</a>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </tbody>
         </table>
-
     </div>
+
 </body>
 </html>
